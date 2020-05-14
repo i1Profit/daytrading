@@ -69,9 +69,8 @@ DefineGlobalColor("NoTrend", color.LIGHT_GRAY);
 def timeFrame = getAggregationPeriod();
 def testTimeFrames = if timeFrame < middleAggregation and middleAggregation < highestAggregation then yes else no;
 
-AddLabel(yes, if testTimeFrames  then "Time Frames Are Correct" else "Time Frames Are Wrong", if testTimeFrames  then color.GREEN else color.RED);
+AddLabel(yes, if testTimeFrames  then "Indicator is Correct" else "Indicator is Wrong", if testTimeFrames  then color.GREEN else color.RED);
 
-# This section is for the chart level MACD
 def fastAvg = ExpAverage(close, fastLength);
 def slowAvg = ExpAverage(close, slowLength);
 
@@ -81,7 +80,6 @@ plot Avg = ExpAverage(Value, MACDLength);
 Avg.SetDefaultColor(color.YELLOW);
 plot Diff = (value - avg)*3;
 
-# This section is for the medium term MACD
 def midTermFastAvg = ExpAverage(close(period = middleAggregation) , midTermFastLength);
 def midTermSlowAvg = ExpAverage(close(period = middleAggregation) , midTermSlowLength);
 
@@ -91,7 +89,6 @@ plot midTermDiff = (midTermValue - midTermAvg)*3;
 midTermDiff.Hide();
 midTermDiff.HideBubble();
 
-# This section is for the long term MACD
 def longTermFastAvg = ExpAverage(close(period = highestAggregation) , longTermFastLength);
 def longTermSlowAvg = ExpAverage(close(period = highestAggregation) , longTermSlowLength);
 
@@ -105,7 +102,7 @@ longTermDiff.HideBubble();
 def midTermLower = midTermDiff < midTermDiff[1];
 def midTermHigher = midTermDiff > midTermDiff[1];
 rec midTermSignal = if midTermLower then  yes  else if midTermSignal[1] == yes and midTermHigher == no then yes else no;
-#plot test = midTermSignal;
+
 def longTermLower = longTermDiff < longTermDiff[1];
 def longTermHigher = longTermDiff > longTermDiff[1];
 rec longTermSignal = if longTermLower then  yes  else if longTermSignal[1] == yes and longTermHigher == no then yes else no;
@@ -121,7 +118,3 @@ plot zeroLine = if close[-1] > 0 then 0 else Double.Nan;
 zeroLine.AssignValueColor(if Diff > Diff[1] and midTermSignal == no and longTermSignal == no then GlobalColor("UpTrend") else if Diff < Diff[1] and midTermSignal == yes and longTermSignal == yes then GlobalColor("DownTrend") else GlobalColor("NoTrend") );
 zeroLine.SetPaintingStrategy(PaintingStrategy.POINTS);
 zeroLine.SetLineWeight(3);
-
-
-
-
