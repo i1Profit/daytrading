@@ -9,8 +9,7 @@ def h = high;
 def l = low;
 
 Script prior {
-    # subscript
-    for getting prior value of a BarNumber() defined variable
+# subscript for getting prior value of a BarNumber() defined variable
     input prior = close;
     def priorOf =
         if prior != prior[1] then prior[1]
@@ -35,10 +34,7 @@ def globex =
 then bn
 else globex[1];
 # If you want to include the extended session in Globex, then use globex def below
-#def globex =
-    if time crosses above rte
-# then bn
-else globex[1];
+#def globex = if time crosses above rte then bn else globex[1];
 
 def priorRTH = prior(RTH);
 def priorGlobex = prior(globex);
